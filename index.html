@@ -1,37 +1,90 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Library of Congress Search</title>
+  <title>Libray of Congress Search Engine</title>
 </head>
 <body>
-  <h1>Library of Congress Search</h1>
+  <h1>Search Results</h1>
 
+  <!-- Form for performing a search -->
   <form id="searchForm">
-    <label for="searchQuery">Search Query:</label>
-    <input type="text" id="searchQuery" required>
-
-    <label for="format">Format:</label>
-    <select id="format">
-      <option value="">Select a format</option>
-      <option value="books">Books</option>
-      <option value="photos">Photos</option>
-      <option value="maps">Maps</option>
-      
-    </select>
-
-    <button type="submit">Search</button>
+    <input type="text" id="searchInput" placeholder="Enter your search query">
+    <input type="submit" value="Search">
   </form>
 
+  <!-- Container for displaying the search results -->
+  <div id="searchResults"></div>
+
   <script>
-    document.getElementById('searchForm').addEventListener('submit', function(event) {
-      event.preventDefault(); // Prevent form submission
+    // Function to fetch data from the Library of Congress API
+    function fetchData(url) {
+      return fetch(url)
+        .then(response => response.json())
+        .then(data => data.results);
+    }
 
-      var searchQuery = document.getElementById('searchQuery').value;
-      var format = document.getElementById('format').value;
+    // Function to display the search results
+    function displayResults(results) {
+      const searchResultsContainer = document.getElementById('searchResults');
+      
+      // Clear previous results
+      searchResultsContainer.innerHTML = '';
 
-      var url = 'search-results.html?q=' + encodeURIComponent(searchQuery) + '&format=' + encodeURIComponent(format);
-      location.assign(url);
-    });
+      // Display each result
+      results.forEach(result => {
+        const resultElement = document.createElement('div');
+        resultElement.textContent = result.title;
+        searchResultsContainer.appendChild(resultElement);
+      });
+    }
+
+    // Function to handle form submission
+    function handleFormSubmit(event) {
+      event.preventDefault();
+      
+      const searchInput = document.getElementById('searchInput');
+      const query = searchInput.value;
+
+      // Build the API request URL
+      let url = 'https://www.loc.gov/search/';
+
+      // Check if a format is specified
+      const formatParam = new URLSearchParams(window.location.search).get('format');
+      if (formatParam) {
+        url += 'format/' + formatParam + '/';
+      }
+
+      // Add the search query to the URL
+      url += '?q=' + encodeURIComponent(query);
+
+      // Fetch data from the API and display the results
+      fetchData(url)
+        .then(results => displayResults(results))
+        .catch(error => console.error(error));
+    }
+
+    // Add event listener to the form
+    const searchForm = document.getElementById('searchForm');
+    searchForm.addEventListener('submit', handleFormSubmit);
+
+    // Parse query parameters on page load
+    const queryParams = new URLSearchParams(window.location.search);
+    const formatParam = queryParams.get('format');
+
+    // Use format endpoint if format query parameter is specified
+    if (formatParam) {
+      const formatUrl = 'https://www.loc.gov/format/' + formatParam + '/';
+      fetchData(formatUrl)
+        .then(results => displayResults(results))
+        .catch(error => console.error(error));
+    }
+    // Use search endpoint if format query parameter is not specified
+    else {
+      const searchUrl = 'https://www.loc.gov/search/';
+      fetchData(searchUrl)
+        .then(results => displayResults(results))
+        .catch(error => console.error(error));
+    }
   </script>
 </body>
 </html>
