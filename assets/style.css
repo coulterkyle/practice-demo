@@ -1,0 +1,36 @@
+* {
+    margin: 0;
+    padding: 0;
+    font-family: 'Didot', serif;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: rgb(52, 52, 131);
+}
+
+form{
+    background: #fff;
+    width: 90%;
+    max-width: 600px;
+    margin: 100px auto 0;
+    padding: 30px;
+}
+
+form h1{
+    font-size: x-large;
+    text-align: center;
+}
+
+#searchForm{
+    justify-content: center;
+    text-align: center;
+    border: 10px black;
+}
+
+
+
+#hide {
+    display: none;
+}
+
