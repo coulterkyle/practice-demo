@@ -2,7 +2,6 @@
     margin: 0;
     padding: 0;
     font-family: 'Didot', serif;
-    box-sizing: border-box;
 }
 
 body {
@@ -15,20 +14,38 @@ form{
     max-width: 600px;
     margin: 100px auto 0;
     padding: 30px;
+    border-radius: 10px;
 }
 
 form h1{
-    font-size: x-large;
+    font-size: 33px;
+    margin-bottom: 10px;
     text-align: center;
+}
+
+form h2 {
+    margin-bottom: 10px;
 }
 
 #searchForm{
     justify-content: center;
     text-align: center;
     border: 10px black;
+    display: grid;
 }
 
+input#searchInput{
+    text-align: center;
+    font-size: 25px;
+    margin-bottom: 5px;
+}
 
+input#format {
+    text-align: center;
+    font-size: 25px;
+    margin-bottom: 10px;
+
+}
 
 #hide {
     display: none;
